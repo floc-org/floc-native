@@ -1,16 +1,32 @@
 import { StyleSheet, TextInput, View, Button } from 'react-native';
 import { useState } from 'react';
+import FirebaseInitialize from '../configs/FirebaseConfig';
+import firebase from 'firebase/compat/app';
 
 function CreateEvent(props) {
 
     const [eventName, setEventName] = useState('');
     const [eventTime, setEventTime] = useState('');
     const [eventLocation, setEventLocation] = useState('');
+    const [eventDescription, setEventDescription] = useState('');
 
     function postEventHandler() {
-        console.log(eventName);
-        props.navigation.navigate('Events');
+        
+        FirebaseInitialize;
+        const firestore = firebase.firestore();
+        firestore.collection('events').add({ // TODO: Validation and duplicate detection.
+            username: 'Deepak', // TODO: Fetch name from user session.
+            creation_time: 'xxx', // TODO: Fetch system time.
+            event_details: {
+                name: eventName,
+                time: eventTime,
+                location: eventLocation,
+                description: eventDescription,
+            }
+        });
 
+        props.navigation.navigate('Events');
+    
     }
     return (
         <View style={styles.container}>
@@ -29,6 +45,11 @@ function CreateEvent(props) {
                 placeholder="say where"
                 onChangeText={(text) => setEventLocation(text)}
                 value={eventLocation} />
+            <TextInput
+                style={styles.input}
+                placeholder="describe it"
+                onChangeText={(text) => setEventDescription(text)}
+                value={eventDescription} />
             <Button
                 style={styles.btn}
                 title='Post event'
