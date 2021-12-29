@@ -30,18 +30,9 @@ export default function App() {
         <Stack.Screen
           name="CreateEvent"
           component={CreateEvent}
-          options={{ title: 'You can create events here' }}
+          options={{ title: 'You can create an event here' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
