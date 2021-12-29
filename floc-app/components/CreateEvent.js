@@ -2,6 +2,7 @@ import { StyleSheet, TextInput, View, Button } from 'react-native';
 import { useState } from 'react';
 import FirebaseInitialize from '../configs/FirebaseConfig';
 import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 
 function CreateEvent(props) {
 

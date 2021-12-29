@@ -8,7 +8,7 @@ function EventCard(props) {
         <View style={styles.container}>
             <Image
                 style={styles.img}
-                source={{uri:'https://images.fineartamerica.com/images/artworkimages/mediumlarge/2/1-cool-monkey-with-sunglasses-and-headphones-mister-tee.jpg'}}
+                source={{uri:props.img}}
             />
             <Text>{props.name}</Text>
             <Text>{props.activity}</Text>
