@@ -10,7 +10,7 @@ function EventCard(props) {
                 style={styles.img}
                 source={{uri:props.img}}
             />
-            <Text>{props.name}</Text>
+            <Text>{props.username}</Text>
             <Text>{props.activity}</Text>
             <Text>{props.time}</Text>
             <Text>{props.location}</Text>

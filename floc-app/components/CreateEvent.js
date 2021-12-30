@@ -4,6 +4,9 @@ import FirebaseInitialize from '../configs/FirebaseConfig';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
+FirebaseInitialize;
+const firestore = firebase.firestore();
+
 function CreateEvent(props) {
 
     const [eventName, setEventName] = useState('');
@@ -13,8 +16,6 @@ function CreateEvent(props) {
 
     function postEventHandler() {
         
-        FirebaseInitialize;
-        const firestore = firebase.firestore();
         firestore.collection('events').add({ // TODO: Validation and duplicate detection.
             username: 'Deepak', // TODO: Fetch name from user session.
             creation_time: 'xxx', // TODO: Fetch system time.
