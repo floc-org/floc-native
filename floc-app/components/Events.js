@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, Button, StyleSheet, ScrollView, Dimensions, RefreshControl, ActivityIndicator } from 'react-native';
 import EventCard from './EventCard';
 import FirebaseInitialize from '../configs/FirebaseConfig';
 import firebase from 'firebase/compat/app';
@@ -11,14 +11,18 @@ const firestore = firebase.firestore();
 
 function Events(props) {
 
-    const [eventsArray, setEventsArray] = useState([]); // useState re-renders the component every time the data value of eventsArray changes.
+    // useState re-renders the component every time the value of eventsArray changes.
+    const [eventsArray, setEventsArray] = useState([]);
+    const [refreshing, setRefreshing] = useState(true);
 
     // useEffect runs the enclosed function upon each render.
-    // Expressing the function to fetch data (enclosed within useEffect) as aync allows the usage of 'await' to get snapshot, 
-    // which blocks execution of the next line inside the async function until this get is resolved. 
-    useEffect(async () => {
-        // Fetch data from firestore and push it into an array.
-        console.log('this ran');
+    useEffect(() => {
+        fetchEventsData();
+    }, [])
+
+    // Expressing this function as aync allows the usage of 'await' to get snapshot, 
+    // which blocks execution of the next line inside the function until data is fetched.
+    const fetchEventsData = async () => {
         var events_array_inner = [];
         const snapshot = await firestore.collection('events').get() // Snapshot is an iterable collection of documents.
         snapshot.forEach((event) => { // Event is a document.
@@ -33,10 +37,11 @@ function Events(props) {
                 location: data.event_details.location,
                 description: data.event_details.description,
             })
+            setRefreshing(false);
         })
-        // Update the value of eventsArray so that the component can re-render and display updated data.
+        // Updates the value of eventsArray so that the component can re-render and display updated data.
         setEventsArray(events_array_inner);
-    }, [])
+    }
 
     function insertCard(event) {
         return (
@@ -57,6 +62,7 @@ function Events(props) {
 
     return (
         <View>
+            {refreshing ? <ActivityIndicator /> : null}
             <View>
                 <Text style={styles.textHeader}>{eventsArray.length} events in your circle!</Text>
             </View>
@@ -65,8 +71,11 @@ function Events(props) {
                 horizontal={true}
                 decelerationRate={0.9}
                 snapToInterval={width}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={fetchEventsData} />
+                  }
             >
-                {eventsArray.map(insertCard)}
+            {eventsArray.map(insertCard)}
             </ScrollView>
             <Button
                 title='create an event'
